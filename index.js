@@ -1,5 +1,17 @@
-import { tweetsData } from './data.js'
+import { initialTweetsData } from './data.js'
 import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
+
+let tweetsData = []
+
+const storedTweetsData = localStorage.getItem('tweets')
+
+if (storedTweetsData){
+    tweetsData = JSON.parse(storedTweetsData)
+} else {
+    tweetsData = initialTweetsData
+}
+
+
 
 document.addEventListener('click', function(e){
     if(e.target.dataset.like){
@@ -31,6 +43,7 @@ function handleLikeClick(tweetId){
         targetTweetObj.likes++ 
     }
     targetTweetObj.isLiked = !targetTweetObj.isLiked
+    localStorage.setItem('tweets', JSON.stringify(tweetsData))
     render()
 }
 
@@ -46,6 +59,7 @@ function handleRetweetClick(tweetId){
         targetTweetObj.retweets++
     }
     targetTweetObj.isRetweeted = !targetTweetObj.isRetweeted
+    localStorage.setItem('tweets', JSON.stringify(tweetsData))
     render() 
 }
 
@@ -59,6 +73,7 @@ function handleReplyClick(replyId){
     if(targetTweetObj){
         targetTweetObj.isReplyVisible = !targetTweetObj.isReplyVisible
     }
+    localStorage.setItem('tweets', JSON.stringify(tweetsData))
     render()
 }
 
@@ -77,8 +92,9 @@ function handleTweetBtnClick(){
             isRetweeted: false,
             uuid: uuidv4()
         })
-    render()
-    tweetInput.value = ''
+        localStorage.setItem('tweets', JSON.stringify(tweetsData))
+        render()
+        tweetInput.value = ''
     }
 
 }
@@ -97,8 +113,9 @@ function handleReplyBtnClick(tweetId){
             tweetText: replyInput.value,
         })
         targetTweetObj.isReplyVisible = true
+        localStorage.setItem('tweets', JSON.stringify(tweetsData))
         render()
-    replyInput.value = ''
+        replyInput.value = ''
     }
 
 }
