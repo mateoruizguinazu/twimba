@@ -101,7 +101,7 @@ function handleTweetBtnClick(){
     if(tweetInput.value){
         tweetsData.unshift({
             handle: `@Scrimba`,
-            profilePic: `images/scrimbalogo.png`,
+            profilePic: `./images/scrimbalogo.png`,
             likes: 0,
             retweets: 0,
             tweetText: tweetInput.value,
@@ -129,7 +129,7 @@ function handleReplyBtnClick(tweetId){
     if(replyInput.value){
         targetTweetObj.replies.push({
             handle: `@Scrimba`,
-            profilePic: `images/scrimbalogo.png`,
+            profilePic: `./images/scrimbalogo.png`,
             tweetText: replyInput.value,
         })
         targetTweetObj.isReplyVisible = true
@@ -228,7 +228,7 @@ function getFeedHtml(){
     <div class="${repliesDivClass}" id="replies-${tweet.uuid}">
         ${repliesHtml}
         <div class="reply-input-area">
-			<img src="images/scrimbalogo.png" class="profile-pic">
+			<img src="./images/scrimbalogo.png" class="profile-pic">
 			<textarea placeholder="Post your reply" class='reply-input' id="reply-input-${tweet.uuid}" data-reply-input="${tweet.uuid}"></textarea>
 		</div>
 		<button class='reply-btn' id="reply-btn-${tweet.uuid}" data-reply-btn="${tweet.uuid}">Reply</button>
