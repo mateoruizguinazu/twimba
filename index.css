@@ -32,7 +32,7 @@ i{
 /* layout */
 
 main, header{
-    width: 290px;
+    width: 370px;
     margin: 0 auto;
 }
 
@@ -116,6 +116,30 @@ button{
     width: 207px;
     font-size: 14px;
     line-height: 20px;
+}
+
+/* reply */
+
+.reply-input-area{
+    display: flex;
+    align-items:start;
+    margin: 12px 0;
+    gap: 12px;
+}
+
+.reply-input{
+    border: 1px solid #999;
+    border-radius: 8px;
+    margin-bottom: 0;
+    font-size: 14px;
+}
+
+.reply-input-area .profile-pic{
+    width: 32px;
+}
+
+.reply-btn {
+    font-size: 16px;
 }
 
 /* images */

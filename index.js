@@ -14,6 +14,9 @@ document.addEventListener('click', function(e){
     else if(e.target.id === 'tweet-btn'){
         handleTweetBtnClick()
     }
+    else if(e.target.dataset.replyBtn){
+        handleReplyBtnClick(e.target.dataset.replyBtn)
+    }
 })
  
 function handleLikeClick(tweetId){ 
@@ -48,6 +51,15 @@ function handleRetweetClick(tweetId){
 
 function handleReplyClick(replyId){
     document.getElementById(`replies-${replyId}`).classList.toggle('hidden')
+
+    const targetTweetObj = tweetsData.filter(function(tweet) {
+        return tweet.uuid === replyId
+    })[0]
+
+    if(targetTweetObj){
+        targetTweetObj.isReplyVisible = !targetTweetObj.isReplyVisible
+    }
+    render()
 }
 
 function handleTweetBtnClick(){
@@ -71,6 +83,28 @@ function handleTweetBtnClick(){
 
 }
 
+function handleReplyBtnClick(tweetId){
+    const targetTweetObj = tweetsData.filter(function(tweet){
+        return tweet.uuid === tweetId
+    })[0]
+
+    const replyInput = document.getElementById(`reply-input-${targetTweetObj.uuid}`)
+    
+    if(replyInput.value){
+        targetTweetObj.replies.push({
+            handle: `@Scrimba`,
+            profilePic: `images/scrimbalogo.png`,
+            tweetText: replyInput.value,
+        })
+        targetTweetObj.isReplyVisible = true
+        render()
+    replyInput.value = ''
+    }
+
+}
+
+
+
 function getFeedHtml(){
     let feedHtml = ``
     
@@ -88,6 +122,12 @@ function getFeedHtml(){
             retweetIconClass = 'retweeted'
         }
         
+        let repliesDivClass = 'hidden'
+
+        if(tweet.isReplyVisible){
+            repliesDivClass = ''
+        }
+
         let repliesHtml = ''
         
         if(tweet.replies.length > 0){
@@ -136,8 +176,13 @@ function getFeedHtml(){
             </div>   
         </div>            
     </div>
-    <div class="hidden" id="replies-${tweet.uuid}">
+    <div class="${repliesDivClass}" id="replies-${tweet.uuid}">
         ${repliesHtml}
+        <div class="reply-input-area">
+			<img src="images/scrimbalogo.png" class="profile-pic">
+			<textarea placeholder="Post your reply" class='reply-input' id="reply-input-${tweet.uuid}" data-reply-input="${tweet.uuid}"></textarea>
+		</div>
+		<button class='reply-btn' id="reply-btn-${tweet.uuid}" data-reply-btn="${tweet.uuid}">Reply</button>
     </div>   
 </div>
 `
