@@ -23,6 +23,9 @@ document.addEventListener('click', function(e){
     else if(e.target.dataset.reply){
         handleReplyClick(e.target.dataset.reply)
     }
+    else if(e.target.dataset.delete){
+        handleDeleteClick(e.target.dataset.delete)
+    }
     else if(e.target.id === 'tweet-btn'){
         handleTweetBtnClick()
     }
@@ -77,6 +80,21 @@ function handleReplyClick(replyId){
     render()
 }
 
+function handleDeleteClick(tweetId){
+    const targetTweetObj = tweetsData.filter(function(tweet){
+        return tweet.uuid === tweetId
+    })[0]
+
+    const index = tweetsData.indexOf(targetTweetObj);
+
+    if (index > -1) {
+        tweetsData.splice(index, 1)
+    }
+
+    localStorage.setItem('tweets', JSON.stringify(tweetsData))
+    render()
+}
+
 function handleTweetBtnClick(){
     const tweetInput = document.getElementById('tweet-input')
 
@@ -90,8 +108,10 @@ function handleTweetBtnClick(){
             replies: [],
             isLiked: false,
             isRetweeted: false,
+            isMine: true,
             uuid: uuidv4()
         })
+        
         localStorage.setItem('tweets', JSON.stringify(tweetsData))
         render()
         tweetInput.value = ''
@@ -150,17 +170,28 @@ function getFeedHtml(){
         if(tweet.replies.length > 0){
             tweet.replies.forEach(function(reply){
                 repliesHtml+=`
-<div class="tweet-reply">
-    <div class="tweet-inner">
-        <img src="${reply.profilePic}" class="profile-pic">
-            <div>
-                <p class="handle">${reply.handle}</p>
-                <p class="tweet-text">${reply.tweetText}</p>
-            </div>
-        </div>
-</div>
-`
+                    <div class="tweet-reply">
+                        <div class="tweet-inner">
+                            <img src="${reply.profilePic}" class="profile-pic">
+                                <div>
+                                    <p class="handle">${reply.handle}</p>
+                                    <p class="tweet-text">${reply.tweetText}</p>
+                                </div>
+                            </div>
+                    </div>
+                    `
             })
+        }
+
+        let deleteHtml = ''
+
+        if (tweet.isMine){
+            deleteHtml += `
+                <span id='delete-button' class="tweet-detail">
+                    <i class="fa-regular fa-trash-can"
+                    data-delete="${tweet.uuid}"
+                    ></i>
+                </span>`
         }
         
           
@@ -179,7 +210,7 @@ function getFeedHtml(){
                     ${tweet.replies.length}
                 </span>
                 <span class="tweet-detail">
-                    <i class="fa-solid fa-heart ${likeIconClass}"
+                    <i class="fa-regular fa-heart ${likeIconClass}"
                     data-like="${tweet.uuid}"
                     ></i>
                     ${tweet.likes}
@@ -190,6 +221,7 @@ function getFeedHtml(){
                     ></i>
                     ${tweet.retweets}
                 </span>
+                ${deleteHtml}
             </div>   
         </div>            
     </div>
