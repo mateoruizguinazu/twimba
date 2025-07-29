@@ -100,7 +100,7 @@ function handleTweetBtnClick(){
 
     if(tweetInput.value){
         tweetsData.unshift({
-            handle: `@Scrimba`,
+            handle: `@Mateo`,
             profilePic: `./images/scrimbalogo.png`,
             likes: 0,
             retweets: 0,
@@ -128,7 +128,7 @@ function handleReplyBtnClick(tweetId){
     
     if(replyInput.value){
         targetTweetObj.replies.push({
-            handle: `@Scrimba`,
+            handle: `@Mateo`,
             profilePic: `./images/scrimbalogo.png`,
             tweetText: replyInput.value,
         })
@@ -152,6 +152,8 @@ function getFeedHtml(){
         if (tweet.isLiked){
             likeIconClass = 'liked'
         }
+
+        const heartIconType = tweet.isLiked ? 'fa-solid' : 'fa-regular';
         
         let retweetIconClass = ''
         
@@ -210,7 +212,7 @@ function getFeedHtml(){
                     ${tweet.replies.length}
                 </span>
                 <span class="tweet-detail">
-                    <i class="fa-regular fa-heart ${likeIconClass}"
+                    <i class="${heartIconType} fa-heart ${likeIconClass}"
                     data-like="${tweet.uuid}"
                     ></i>
                     ${tweet.likes}
